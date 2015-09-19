@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">XSS testing</div>
+  <table class="table">
+      <thead>
+        <tr>
+          <th>Scheme</th>
+          <th>Method</th>
+          <th>Host</th>
+          <th>Path</th>
+          <th>Result</th>
+         </tr>
+      </thead>
+               {{#each data}}
+
+        <tbody>
+            <tr>
+                <td>{{Scheme}}</td>
+                <td>{{Method}}</td>
+                <td>{{Host}}</td>
+                <td style="word-break: break-word;width:500px;word-wrap: break-word;">{{Path}}</td>
+                <td style="word-break: break-word;width:500px;word-wrap: break-word;">{{Result}}</td>
+
+            </tr>
+        </tbody>
+        {{/each}}
+  </table>  <!-- Table -->
+
+</div>

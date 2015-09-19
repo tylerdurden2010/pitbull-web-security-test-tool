@@ -1,0 +1,74 @@
+
+<div class="panel panel-default">
+      <!-- Default panel contents -->
+  <div class="panel-heading"> 
+    <a class="btn btn-sm btn-primary" role="button" data-toggle="collapse" href="#hostinfo" aria-expanded="false" aria-controls="hostinfo">
+    Targets {{Len}}
+    </a>
+    <div class="col-md-4">
+    <div class="col-lg-6">
+    <div class="input-group">
+      <input id="search" type="text" class="form-control" placeholder="Host/IP" data-toggle="hideseek" data-list=".search" >
+      <span class="input-group-btn">
+        <button id="button" class="btn btn-default" type="button">Go!</button>
+      </span>
+    </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+    </div>  
+
+      </div> <!-- panel-heading -->
+
+       <!-- 用来折叠 collapse in -->
+    <div class="collapse in" id="hostinfo">
+    <!-- Table -->
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>IP</th>
+            <th>Scheme</th>
+            <th>Host</th>
+            <th>Payload</th>
+            <th>Attacker</th>
+
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+         
+            {{#each AllData}}
+          <tr>
+            <th scope="row"></th>
+            <td>{{IP}}</td>
+            <td>{{Scheme}}</td>
+            <td>{{Host}}</td>
+            <td><a href="/payload/{{ID}}">Payload <!-- <span class="badge">1</span> --></a></td>
+            <td>SecurityTeam</td>
+          </tr>
+
+          {{/each}}
+        </tbody>
+      </table>
+        </div>
+</div>
+<script>
+$("#button").click(function() {
+  var test = $("#search").val();
+  if(test)
+  {
+    var base = "/list/search?param=" +test;
+    window.location.href = base;
+  }
+  else
+  {
+    window.location.href = "/list";
+  }
+
+      // $("#button").text("back");
+
+
+}); 
+</script>
+
+
+

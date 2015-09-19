@@ -1,0 +1,15 @@
+<div id="page-content" class="well text-center">Page 1</div>
+            <div class="text-center">
+                <ul id="pagination-demo" class="pagination-sm"></ul>
+            </div>
+</div>
+
+<script>
+ $('#pagination-demo').twbsPagination({
+        totalPages: 35,
+        visiblePages: 7,
+        onPageClick: function (event, page) {
+            $('#page-content').text('mabi ' + page);
+        }
+    });
+</script>

@@ -1,0 +1,248 @@
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">{{Host}} </div>
+    <div class="panel-body">
+  <!-- Table -->
+   <table class="table table-hover">
+         <thead>
+        <tr>
+          <th>Method</th>
+          <th>Scheme</th>
+          <th>Path</th>
+          <th>Payload</th>
+          <th>Burpsuite</th>
+         </tr>
+      </thead>
+         {{#each AllPayload}}
+         <tbody>
+        <script type="text/javascript">
+              $.ajax({
+                url: "/payload/host/{{ID}}",
+                dataType:'json',
+                success:function(data){
+                  $('#Method{{ID}}').append(data.Method);
+                  $('#Scheme{{ID}}').append(data.Scheme);
+                  $('#Path{{ID}}').html('<a href='+data.Scheme+'://'+data.Header.Host+data.Path +' target="_blank">{{Path}}</a>');
+
+                                var burprepeat{{ID}} = data.Method + " " + data.Path + " HTTP/1.1" + "\r\n"
+                  for (var key in data.Header)
+                  {
+                    burprepeat{{ID}} =  burprepeat{{ID}} + key + ":" + data.Header[key] + "\r\n";
+                    
+                  } 
+                  burprepeat{{ID}} = burprepeat{{ID}} + "\r\n"+data.PostData + "\r\n"; 
+                    $(document).ready(function(){
+                    //because zclip using flash overlap the HTML element
+                    //so if we use some pop-up style button or click ,
+                    //we cannot triggle the copy opreation
+                    //zclip cannto situated the exactlly postion.
+                      $('#Copy{{ID}}').zclip({
+                      path: '/dist/js/ZeroClipboard.swf',
+                      copy: function(){ 
+                        $('#Copy{{ID}}').html('Done')
+                        
+                        return burprepeat{{ID}};
+
+                         }
+                      
+                      });
+                    });
+                }
+              });
+          </script>    
+          <tr >
+            <td id="Method{{ID}}"> </td>
+            <td id="Scheme{{ID}}"></td>
+            <td id="Path{{ID}}" style="word-break: break-word;width:500px;word-wrap: break-word;">{{Path}}</td>
+  <!--           <td style="word-break: break-word;width:500px;word-wrap: break-word;" data-toggle="modal" data-target="#gridSystemModal{{ID}}">{{Payload}}</td> -->
+            <td style="word-break: break-word;width:500px;word-wrap: break-word;" >{{Payload}}
+              <br>
+              <button class="btn btn-xs btn-info" data-toggle="modal" data-target="#gridSystemModal{{ID}}">SQL</button>
+
+              <button class="btn btn-xs btn-info" data-toggle="modal" data-target="#gridSystemModal2{{ID}}">XSS</button>
+
+              <button class="btn btn-xs btn-info" data-toggle="modal" data-target="#gridSystemModal3{{ID}}">CSRF</button>
+            </br>
+            </td>
+            <td style="position:relative">
+            <button class="btn btn-xs btn-danger" id="Copy{{ID}}" href="#">Copy  </button></td>
+          </tr>
+            </tbody>
+      {{/each}}
+     </table> 
+ </div> <!-- panel-body -->
+
+</div>
+
+
+
+        {{#each AllPayload}}
+          <script type="text/javascript">
+              $.ajax({
+                url: "/payload/host/{{ID}}",
+                dataType:'json',
+                success:function(data){
+                  $('.inputMethod{{ID}}').val(data.Method);
+                  $('.inputScheme{{ID}}').val(data.Scheme);
+                  $('.inputHeader{{ID}}').val(JSON.stringify(data.Header,null,4));
+                  $('.inputHost{{ID}}').val(data.Header.Host);
+                  $('.inputPort{{ID}}').val(data.Port);
+                  $('.inputIP{{ID}}').val(data.IP);
+                  $('.postData{{ID}}').val(data.PostData);
+                  $('.inputPath{{ID}}').val(data.Path);
+                }
+              });
+          </script>    
+
+<form action="/sqlattack" method="post" id="payload">
+    <div id="gridSystemModal{{ID}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridModalLabel">Payload</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="container-fluid">
+           <label for="inputScheme">Scheme</label>
+            <input id="inputScheme" type="text" class="form-control inputScheme{{ID}}" placeholder="Text input" name="Scheme">
+           <label for="inputPort">Port</label>
+            <input id="inputPort" type="text" class="form-control inputPort{{ID}}" placeholder="Text input" name="Port">
+            <label for="inputMethod">Method</label>
+            <input id="inputMethod" type="text" class="form-control inputMethod{{ID}}" name="Method">
+            <label for="inputHost">Host</label>
+            <input id="inputHost" type="text" class="form-control inputHost{{ID}}" value="" name="Host">
+            <label for="Path">Path</label>
+            <input id="Path" type="text" class="form-control Path{{ID}}" value='{{Path}}' name="Path">
+              <label for="Payload">Payload</label>
+            <input id="Payload" type="text" class="form-control" placeholder="None" value='{{Payload}}' name="Payload">
+
+              <label for="inputHeader">Headers</label>
+            <textarea name="Header" style="height:240px" id="inputHeader" class="form-control inputHeader{{ID}}" rows="3"></textarea>
+             <label for="inputHeader{{ID}}">Level</label>
+             <select class="form-control" name="Level">
+              <option value=1>1</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+              <option value=5>5</option>
+            </select>
+            <label for="inputHeader">Dbms</label>
+             <select class="form-control" name="Dbms">
+              <option value="MySQL">MySQL</option>
+              <option value="Microsoft SQL Server">Microsoft SQL Server</option>
+              <option value="Microsoft Access">Microsoft Access</option>
+              <option value="Oracle">Oracle</option>
+              <option value="PostgreSQL">PostgreSQL</option>
+              <option value="SAP MaxD¡B">SAP MaxDB</option>
+              <option value="SQLite">SQLite</option>
+              <option value="Sybase">Sybase</option>
+              <option value="Firebird">Firebird</option>
+              <option value="IBM DB2">IBM DB2</option>
+              <option value="HSQLDB">HSQLDB</option>
+            </select>
+             <input id="ID{{ID}}" type="hidden" class="form-control" placeholder="None" value='{{ID}}' name="OriginID">
+             <input id="inputIP{{ID}}" type="hidden" class="form-control inputIP{{ID}}" placeholder="None" value='' name="IP">
+
+
+          </div>
+        </div>
+         <div class="modal-footer">
+
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</form>
+
+
+<form action="/xssattack" method="post" id="payload">
+    <div id="gridSystemModal2{{ID}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridModalLabel">Payload</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="container-fluid">
+           <label for="inputScheme">Scheme</label>
+            <input id="inputScheme" type="text" class="form-control inputScheme{{ID}}" placeholder="Text input" name="Scheme">
+           <label for="inputPort">Port</label>
+            <input id="inputPort" type="text" class="form-control inputPort{{ID}}" placeholder="Text input" name="Port">
+            <label for="inputMethod">Method</label>
+            <input id="inputMethod" type="text" class="form-control inputMethod{{ID}}" name="Method">
+            <label for="inputHost">Host</label>
+            <input id="inputHost" type="text" class="form-control inputHost{{ID}}" value="" name="Host">
+            <label for="Path">Path</label>
+            <input id="Path{{ID}}" type="text" class="form-control inputPath{{ID}}" value='' name="Path">
+              <label for="Payload">Payload</label>
+            <input id="Payload" type="text" class="form-control postData{{ID}}" placeholder="None" value="" name="Payload">
+
+              <label for="inputHeader">Headers</label>
+            <textarea name="Header" style="height:240px" id="inputHeader" class="form-control inputHeader{{ID}}" rows="3"></textarea>
+             
+             <input id="ID{{ID}}" type="hidden" class="form-control" placeholder="None" value='{{ID}}' name="OriginID">
+             <input id="inputIP" type="hidden" class="form-control inputIP{{ID}}" placeholder="None" value='' name="IP">
+
+
+          </div>
+        </div>
+         <div class="modal-footer">
+
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</form>
+
+<form action="/csrfattack" method="post" id="payload">
+    <div id="gridSystemModal3{{ID}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridModalLabel">Payload</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="container-fluid">
+           <label for="inputScheme">Scheme</label>
+            <input id="inputScheme" type="text" class="form-control inputScheme{{ID}}" placeholder="Text input" name="Scheme">
+           <label for="inputPort">Port</label>
+            <input id="inputPort" type="text" class="form-control inputPort{{ID}}" placeholder="Text input" name="Port">
+            <label for="inputMethod">Method</label>
+            <input id="inputMethod" type="text" class="form-control inputMethod{{ID}}" name="Method">
+            <label for="inputHost">Host</label>
+            <input id="inputHost" type="text" class="form-control inputHost{{ID}}" value="" name="Host">
+            <label for="Path">Path</label>
+            <input id="Path{{ID}}" type="text" class="form-control inputPath{{ID}}" value='' name="Path">
+              <label for="Payload">Payload</label>
+            <input id="Payload" type="text" class="form-control postData{{ID}}" placeholder="None" value="" name="Payload">
+
+              <label for="inputHeader">Headers</label>
+            <textarea name="Header" style="height:240px" id="inputHeader" class="form-control inputHeader{{ID}}" rows="3"></textarea>
+             
+             <input id="ID{{ID}}" type="hidden" class="form-control" placeholder="None" value='{{ID}}' name="OriginID">
+             <input id="inputIP" type="hidden" class="form-control inputIP{{ID}}" placeholder="None" value='' name="IP">
+
+
+          </div>
+        </div>
+         <div class="modal-footer">
+
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</form>
+
+{{/each}}
