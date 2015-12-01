@@ -24,16 +24,16 @@
 3、有页面能够展示测试样例，测试结果，安全测试类型并对能选择测试安全项；
 
 如图：
-https://cloud.githubusercontent.com/assets/1246088/11491341/fc2da8ce-981b-11e5-920e-e03883c4b8d6.jpg
+![alt tag](https://cloud.githubusercontent.com/assets/1246088/11491341/fc2da8ce-981b-11e5-920e-e03883c4b8d6.jpg)
 
 
 工具实现
 
 所以有了几个需求，那么可以开始编码了，先看一下完成图。
 
-https://cloud.githubusercontent.com/assets/1246088/11491343/fe271ea8-981b-11e5-8e72-f031127c1122.jpg
+![alt tag](https://cloud.githubusercontent.com/assets/1246088/11491343/fe271ea8-981b-11e5-8e72-f031127c1122.jpg)
 
-https://cloud.githubusercontent.com/assets/1246088/11491345/ff8608cc-981b-11e5-8e53-e6aaaa6f911b.jpg
+![alt tag](https://cloud.githubusercontent.com/assets/1246088/11491345/ff8608cc-981b-11e5-8e53-e6aaaa6f911b.jpg)
 
 代理工具编写
 
